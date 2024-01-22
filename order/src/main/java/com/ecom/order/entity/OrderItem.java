@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @SequenceGenerator(name = "ORDER_ITEM_SEQ", sequenceName = "ORDER_ITEM_SEQ")
-@Table(name = "ORDER_ITEM")
+@Table(name = "ORDER_ITEM_TABLE")
 public class OrderItem {
 
     @Id

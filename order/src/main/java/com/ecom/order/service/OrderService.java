@@ -42,8 +42,8 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public List<OrderOutput> findAllOrderByOrderNumber() {
-        List<OrderOutput> output = readUseCase.findAllOrderByOrderNumber().stream()
+    public List<OrderOutput> findAll() {
+        List<OrderOutput> output = readUseCase.findAll().stream()
                 .map(OrderMapper::entityToOutput).toList();
         log.info("Found {} orders.", output.size());
         return output;

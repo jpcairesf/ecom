@@ -16,8 +16,8 @@ public class OrderReadUseCase {
 
     private final OrderRepository repository;
 
-    public List<Order> findAllOrderByOrderNumber() {
-        return repository.findAllOrderByOrderNumberAsc();
+    public List<Order> findAll() {
+        return repository.findAll();
     }
 
     public Order findByOrderNumber(String orderNumber) {

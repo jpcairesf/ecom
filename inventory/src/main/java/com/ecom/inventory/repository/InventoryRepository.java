@@ -13,6 +13,6 @@ public interface InventoryRepository extends MongoRepository<Inventory, String> 
     Integer findQuantityBySku(String sku);
 
     @Update("{ '$inc': { 'quantity': ?1 } }")
-    Inventory findAndIncrementQuantityBySku(String sku, int increment);
+    Integer findAndIncrementQuantityBySku(String sku, int increment);
 
 }

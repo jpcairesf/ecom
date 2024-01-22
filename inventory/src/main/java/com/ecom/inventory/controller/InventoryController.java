@@ -35,12 +35,12 @@ public class InventoryController {
     }
 
     @PatchMapping("/increment/{sku}")
-    public ResponseEntity<InventoryOutput> incrementBySku(@PathVariable String sku) {
+    public ResponseEntity<Integer> incrementBySku(@PathVariable String sku) {
         return status(OK).body(service.incrementBySku(sku));
     }
 
     @PatchMapping("/decrement/{sku}")
-    public ResponseEntity<InventoryOutput> decrementBySku(@PathVariable String sku) {
+    public ResponseEntity<Integer> decrementBySku(@PathVariable String sku) {
         return status(OK).body(service.decrementBySku(sku));
     }
 

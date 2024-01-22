@@ -1,0 +1,76 @@
+---
+version: '3.7'
+services:
+  product-db:
+    container_name: product-db
+    image: mongo:5.0.24-focal
+    restart: always
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./product-db:/data/db
+
+  order-db:
+    container_name: order-db
+    image: postgres:13.13
+    environment:
+      POSTGRES_DB: order
+      POSTGRES_USER: manager
+      POSTGRES_PASSWORD: manager
+      PGDATA: /data/postgres
+    volumes:
+      - ./order-db:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: always
+
+  inventory-db:
+    container_name: inventory-db
+    image: mongo:5.0.24-focal
+    command: mongod --port 27018
+    restart: always
+    ports:
+      - "27018:27018"
+    expose:
+      - "27018"
+    volumes:
+      - ./inventory-db:/data/db
+
+  product:
+    container_name: product
+    image: jpcairesf/product:latest
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - product-db
+
+  order:
+    container_name: order
+    image: jpcairesf/order:latest
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://order-db:5432/order
+    depends_on:
+      - order-db
+
+  inventory:
+    container_name: inventory
+    image: jpcairesf/inventory:latest
+    ports:
+      - "8082:8082"
+    expose:
+      - "8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - inventory-db

@@ -21,7 +21,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @SequenceGenerator(name = "ORDER_SEQ", sequenceName = "ORDER_SEQ")
-@Table(name = "ORDER", uniqueConstraints = {
+@Table(name = "ORDER_TABLE", uniqueConstraints = {
     @UniqueConstraint(name = "UQ_ORDER_NUMBER", columnNames = "ORDER_NUMBER")})
 public class Order {
 

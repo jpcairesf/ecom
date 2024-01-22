@@ -39,15 +39,15 @@ public class InventoryService {
     }
 
     @Transactional
-    public InventoryOutput incrementBySku(String sku) {
-        InventoryOutput output = entityToOutput(incrementUseCase.incrementBySku(sku));
+    public Integer incrementBySku(String sku) {
+        Integer output = incrementUseCase.incrementBySku(sku);
         log.info("Inventory with sku {} incremented quantity by 1.", sku);
         return output;
     }
 
     @Transactional
-    public InventoryOutput decrementBySku(String sku) {
-        InventoryOutput output = entityToOutput(incrementUseCase.decrementBySku(sku));
+    public Integer decrementBySku(String sku) {
+        Integer output = incrementUseCase.decrementBySku(sku);
         log.info("Inventory with sku {} decremented quantity by 1.", sku);
         return output;
     }
