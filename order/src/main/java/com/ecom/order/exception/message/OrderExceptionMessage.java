@@ -11,6 +11,7 @@ public class OrderExceptionMessage {
     private static final String ALREADY_EXISTS_BY_ORDER_NUMBER = "There is already an order with order number \"%s\".";
     private static final String NOT_FOUND_BY_ID = "Order with ID \"%s\" not found.";
     private static final String NOT_FOUND_BY_ORDER_NUMBER = "Order with order number \"%s\" not found.";
+    private static final String FOLLOWING_SKU_NOT_IN_STOCK = "The following sku(s) are not in stock: \"%s\".";
 
     public static String alreadyExistsByOrderNumber(String orderNumber) {
         return format(ALREADY_EXISTS_BY_ORDER_NUMBER, orderNumber);
@@ -22,5 +23,9 @@ public class OrderExceptionMessage {
 
     public static String notFoundByOrderNumber(String orderNumber) {
         return format(NOT_FOUND_BY_ORDER_NUMBER, orderNumber);
+    }
+
+    public static String followingSkuNotInStock(String skuList) {
+        return format(FOLLOWING_SKU_NOT_IN_STOCK, skuList);
     }
 }

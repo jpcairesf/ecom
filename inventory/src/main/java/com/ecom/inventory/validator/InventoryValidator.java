@@ -16,16 +16,11 @@ public class InventoryValidator {
 
     private final InventoryRepository repository;
 
-    public void validateSkuExists(String sku) {
-        if(!repository.existsBySku(sku)) throw new EntityNotFoundException(notFoundBySku(sku));
-    }
-
     public void validateSkuNotExists(String sku) {
         if(repository.existsBySku(sku)) throw new BusinessException(alreadyExistsBySku(sku));
     }
 
-    public void validateIsInStockBySku(String sku) {
-        if(repository.findQuantityBySku(sku) < 1) throw new BusinessException(InventoryExceptionMessages.notInStockBySku(sku));
+    public void validateAllSkuExists(int skuSize, int inventoryListSize) {
+        if(inventoryListSize < skuSize) throw new BusinessException(InventoryExceptionMessages.notFoundAllBySkuIn());
     }
-
 }

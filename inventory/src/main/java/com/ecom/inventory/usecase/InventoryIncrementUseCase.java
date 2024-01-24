@@ -1,9 +1,12 @@
 package com.ecom.inventory.usecase;
 
+import com.ecom.inventory.entity.Inventory;
 import com.ecom.inventory.repository.InventoryRepository;
 import com.ecom.inventory.validator.InventoryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -12,17 +15,16 @@ public class InventoryIncrementUseCase {
     private final InventoryRepository repository;
     private final InventoryValidator validator;
 
-    public Integer incrementBySku(String sku) {
-        validator.validateSkuExists(sku);
-
-        return repository.findAndIncrementQuantityBySku(sku, 1);
+    public List<Inventory> incrementBySku(List<String> skuList) {
+        List<Inventory> inventoryList = repository.findAndIncrementQuantityBySkuIn(skuList, 1);
+        validator.validateAllSkuExists(skuList.size(), inventoryList.size());
+        return inventoryList;
     }
 
-    public Integer decrementBySku(String sku) {
-        validator.validateSkuExists(sku);
-        validator.validateIsInStockBySku(sku);
-
-        return repository.findAndIncrementQuantityBySku(sku, -1);
+    public List<Inventory> decrementBySku(List<String> skuList) {
+        List<Inventory> inventoryList = repository.findAndIncrementQuantityBySkuIn(skuList, -1);
+        validator.validateAllSkuExists(skuList.size(), inventoryList.size());
+        return inventoryList;
     }
 
 }

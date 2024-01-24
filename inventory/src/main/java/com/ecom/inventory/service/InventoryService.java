@@ -1,6 +1,7 @@
 package com.ecom.inventory.service;
 
 import com.ecom.inventory.dto.input.InventoryCreateInput;
+import com.ecom.inventory.dto.mapper.InventoryMapper;
 import com.ecom.inventory.dto.output.InventoryOutput;
 import com.ecom.inventory.usecase.InventoryCreateUseCase;
 import com.ecom.inventory.usecase.InventoryIncrementUseCase;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.ecom.inventory.dto.mapper.InventoryMapper.entityToOutput;
 
@@ -29,26 +32,26 @@ public class InventoryService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean isInStockBySku(String sku) {
-        Boolean isInStock = readUseCase.isInStockBySku(sku);
-        if(Boolean.TRUE.equals(isInStock))
-            log.info("Inventory with sku {} is in stock.", sku);
-        else
-            log.info("Inventory with sku {} is not in stock.", sku);
-        return isInStock;
-    }
-
-    @Transactional
-    public Integer incrementBySku(String sku) {
-        Integer output = incrementUseCase.incrementBySku(sku);
-        log.info("Inventory with sku {} incremented quantity by 1.", sku);
+    public List<InventoryOutput> findBySkuIn(List<String> skuList) {
+        List<InventoryOutput> output = readUseCase.findBySkuIn(skuList).stream()
+                .map(InventoryMapper::entityToOutput).toList();
+        log.info("All {} inventories retrieved.", output.size());
         return output;
     }
 
     @Transactional
-    public Integer decrementBySku(String sku) {
-        Integer output = incrementUseCase.decrementBySku(sku);
-        log.info("Inventory with sku {} decremented quantity by 1.", sku);
+    public List<InventoryOutput> incrementBySkuIn(List<String> skuList) {
+        List<InventoryOutput> output = incrementUseCase.incrementBySku(skuList).stream()
+                .map(InventoryMapper::entityToOutput).toList();
+        log.info("Successfully incremented all {} inventories quantity by 1.", output.size());
+        return output;
+    }
+
+    @Transactional
+    public List<InventoryOutput> decrementBySkuIn(List<String> skuList) {
+        List<InventoryOutput> output = incrementUseCase.decrementBySku(skuList).stream()
+                .map(InventoryMapper::entityToOutput).toList();
+        log.info("Successfully decremented all {} inventories quantity by 1.", output.size());
         return output;
     }
 

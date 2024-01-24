@@ -1,17 +1,22 @@
 package com.ecom.order.service;
 
 import com.ecom.order.dto.input.OrderCreateInput;
+import com.ecom.order.dto.input.OrderItemCreateInput;
 import com.ecom.order.dto.input.OrderUpdateInput;
 import com.ecom.order.dto.mapper.OrderMapper;
 import com.ecom.order.dto.output.OrderOutput;
+import com.ecom.order.dto.response.InventoryResponse;
 import com.ecom.order.usecase.OrderCreateUseCase;
 import com.ecom.order.usecase.OrderDeleteUseCase;
 import com.ecom.order.usecase.OrderReadUseCase;
+import com.ecom.order.usecase.OrderStockUseCase;
 import com.ecom.order.usecase.OrderUpdateUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilderFactory;
 
 import java.util.List;
 
@@ -26,9 +31,21 @@ public class OrderService {
     private final OrderReadUseCase readUseCase;
     private final OrderUpdateUseCase updateUseCase;
     private final OrderDeleteUseCase deleteUseCase;
+    private final OrderStockUseCase stockUseCase;
+    private final WebClient webClient;
 
     @Transactional
     public OrderOutput create(OrderCreateInput input) {
+        List<String> skuList = input.orderItems().stream().map(OrderItemCreateInput::sku).toList();
+        InventoryResponse[] responseArray = webClient.get()
+                .uri("https://localhost:8082/api/inventory",
+                        uriBuilder -> uriBuilder.queryParam("sku", skuList).build())
+                .retrieve()
+                .bodyToMono(InventoryResponse[].class)
+                .block();
+
+        stockUseCase.checkInStock(responseArray);
+
         OrderOutput output = entityToOutput(createUseCase.create(input));
         log.info("Order created with ID {} and order number {}.", output.id(), output.orderNumber());
         return output;
