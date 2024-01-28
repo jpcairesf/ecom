@@ -32,13 +32,13 @@ public class OrderService {
     private final OrderUpdateUseCase updateUseCase;
     private final OrderDeleteUseCase deleteUseCase;
     private final OrderStockUseCase stockUseCase;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     @Transactional
     public OrderOutput create(OrderCreateInput input) {
         List<String> skuList = input.orderItems().stream().map(OrderItemCreateInput::sku).toList();
-        InventoryResponse[] responseArray = webClient.get()
-                .uri("https://localhost:8082/api/inventory",
+        InventoryResponse[] responseArray = webClientBuilder.build().get()
+                .uri("https://inventory/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("sku", skuList).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class)
