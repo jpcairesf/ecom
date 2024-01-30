@@ -37,13 +37,15 @@ public class InventoryController {
     }
 
     @PatchMapping("/increment")
-    public ResponseEntity<List<InventoryOutput>> incrementBySkuIn(@RequestParam List<String> skuList) {
-        return status(OK).body(service.incrementBySkuIn(skuList));
+    public ResponseEntity<Integer> incrementBySkuIn(@RequestParam List<String> skuList) {
+        service.incrementBySkuIn(skuList);
+        return status(OK).build();
     }
 
     @PatchMapping("/decrement")
-    public ResponseEntity<List<InventoryOutput>> decrementBySkuIn(@RequestParam List<String> skuList) {
-        return status(OK).body(service.decrementBySkuIn(skuList));
+    public ResponseEntity<Integer> decrementBySkuIn(@RequestParam List<String> skuList) {
+        service.decrementBySkuIn(skuList);
+        return status(OK).build();
     }
 
 }

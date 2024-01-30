@@ -16,7 +16,8 @@ public interface InventoryRepository extends MongoRepository<Inventory, String> 
     @Query("{ '$in': { 'sku': ?0 } }")
     List<Inventory> findBySkuIn(List<String> sku);
 
-    @Update(value = "{ '$in': { 'sku': ?0 } }", update = "{ '$inc': { 'quantity': ?1 } }")
-    List<Inventory> findAndIncrementQuantityBySkuIn(List<String> sku, int increment);
+    @Query("{ '$in': { 'sku': ?0 } }")
+    @Update("{ '$inc': { 'quantity': ?1 } }")
+    Integer findAndIncrementQuantityBySkuIn(List<String> sku, int increment);
 
 }

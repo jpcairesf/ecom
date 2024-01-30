@@ -40,19 +40,17 @@ public class InventoryService {
     }
 
     @Transactional
-    public List<InventoryOutput> incrementBySkuIn(List<String> skuList) {
-        List<InventoryOutput> output = incrementUseCase.incrementBySku(skuList).stream()
-                .map(InventoryMapper::entityToOutput).toList();
-        log.info("Successfully incremented all {} inventories quantity by 1.", output.size());
-        return output;
+    public Integer incrementBySkuIn(List<String> skuList) {
+        Integer updated = incrementUseCase.incrementBySku(skuList);
+        log.info("Successfully incremented all {} inventories quantity by 1.", updated);
+        return updated;
     }
 
     @Transactional
-    public List<InventoryOutput> decrementBySkuIn(List<String> skuList) {
-        List<InventoryOutput> output = incrementUseCase.decrementBySku(skuList).stream()
-                .map(InventoryMapper::entityToOutput).toList();
-        log.info("Successfully decremented all {} inventories quantity by 1.", output.size());
-        return output;
+    public Integer decrementBySkuIn(List<String> skuList) {
+        Integer updated = incrementUseCase.decrementBySku(skuList);
+        log.info("Successfully decremented all {} inventories quantity by 1.", updated);
+        return updated;
     }
 
 }

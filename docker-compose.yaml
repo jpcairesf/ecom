@@ -1,6 +1,7 @@
 ---
 version: '3.7'
 services:
+  # DATABASES
   product-db:
     container_name: product-db
     image: mongo:5.0.24-focal
@@ -38,6 +39,7 @@ services:
     volumes:
       - ./inventory-db:/data/db
 
+  # SERVICES
   product:
     container_name: product
     image: jpcairesf/product:latest
@@ -74,3 +76,14 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - inventory-db
+
+  # SERVICE DISCOVERY
+  service-discovery:
+    container_name: service-discovery
+    image: jpcairesf/service-discovery:latest
+    ports:
+      - "8761:8761"
+    expose:
+      - "8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker

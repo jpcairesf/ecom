@@ -15,16 +15,16 @@ public class InventoryIncrementUseCase {
     private final InventoryRepository repository;
     private final InventoryValidator validator;
 
-    public List<Inventory> incrementBySku(List<String> skuList) {
-        List<Inventory> inventoryList = repository.findAndIncrementQuantityBySkuIn(skuList, 1);
-        validator.validateAllSkuExists(skuList.size(), inventoryList.size());
-        return inventoryList;
+    public Integer incrementBySku(List<String> skuList) {
+        Integer updated = repository.findAndIncrementQuantityBySkuIn(skuList, 1);
+        validator.validateAllSkuExists(skuList.size(), updated);
+        return updated;
     }
 
-    public List<Inventory> decrementBySku(List<String> skuList) {
-        List<Inventory> inventoryList = repository.findAndIncrementQuantityBySkuIn(skuList, -1);
-        validator.validateAllSkuExists(skuList.size(), inventoryList.size());
-        return inventoryList;
+    public Integer decrementBySku(List<String> skuList) {
+        Integer updated = repository.findAndIncrementQuantityBySkuIn(skuList, -1);
+        validator.validateAllSkuExists(skuList.size(), updated);
+        return updated;
     }
 
 }
