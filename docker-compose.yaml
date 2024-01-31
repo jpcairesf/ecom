@@ -43,6 +43,7 @@ services:
   product:
     container_name: product
     image: jpcairesf/product:latest
+    pull_policy: always
     ports:
       - "8080:8080"
     expose:
@@ -51,10 +52,12 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - product-db
+      - service-discovery
 
   order:
     container_name: order
     image: jpcairesf/order:latest
+    pull_policy: always
     ports:
       - "8081:8081"
     expose:
@@ -64,10 +67,12 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://order-db:5432/order
     depends_on:
       - order-db
+      - service-discovery
 
   inventory:
     container_name: inventory
     image: jpcairesf/inventory:latest
+    pull_policy: always
     ports:
       - "8082:8082"
     expose:
@@ -76,14 +81,30 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - inventory-db
+      - service-discovery
 
   # SERVICE DISCOVERY
   service-discovery:
     container_name: service-discovery
     image: jpcairesf/service-discovery:latest
+    pull_policy: always
     ports:
       - "8761:8761"
     expose:
       - "8761"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+
+  # API GATEWAY
+  api-gateway:
+    container_name: api-gateway
+    image: jpcairesf/api-gateway:latest
+    pull_policy: always
+    ports:
+      - "8090:8090"
+    expose:
+      - "8090"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - service-discovery
